@@ -196,6 +196,14 @@ management.endpoints.web.exposure.include=*
 management.endpoints.web.exposure.exclude=health,info
 ```
 
+# Application Properties File
+* By default, Spring Boot reads information from a standart properties file.
+* It is located at: **src/main/resources/application.properties**
+* You can define any custom properties in this file.
+* Your Spring Boot app can access properties using **@Value**
+* You can give any custom property name
+* Spring Boot can be cinfigured in the application.preperties file
+* 1000+ properties
 
 
 
