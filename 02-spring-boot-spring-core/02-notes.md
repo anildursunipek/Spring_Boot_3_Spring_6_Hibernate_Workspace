@@ -118,3 +118,33 @@ public class DemoController{
 private Coach myCoach;
 // no need for constructors or setters
 ```
+
+# Qualifiers
+* If there is more than one bean, we may receive an error. To solve this problem, **Qualifier** is used.
+```Java
+@Autowired
+public DemoController(@Qualifier("tenisCoach") Coach theCoach){
+    this.myCoach = theCoach;
+}
+```
+* The qualifier name is the same as the class name. Just it starts with lower-case.
+
+# Primary
+* When using **@Primary**, can have only one for multiple implementation. If you mark multiple classes with @Primary it is a problem.
+```Java
+@Component
+@Primary
+public class TennisCoach implements Coach{
+    @Override
+    public String getDailyWorkout() {
+        return "Practice fast bowling for 30 minutes";
+    }
+}
+```
+* If you mix @Primary and @Qualifier
+    * @Qualifier has higher priority
+* @Primary could have   the issue of multiple @Primary classes leading to an error
+* @Qualifir allows to you be very specific on which bean you want
+* In general using @Qualifier is recommended
+    * More specific
+    * Higher priority
