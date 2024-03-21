@@ -1,4 +1,4 @@
-# Inversion of Control
+## Inversion of Control
 * Textboox definition: The approach of outsourcing the construction and management of objects.
 * App should be configurable.
 * Easily change the object for another object.
@@ -12,7 +12,7 @@
     * Java Source Code (moders)
 * IoC container
 
-# Dependency Injection
+## Dependency Injection
 * The dependency inversion principle
 * The client delegates to another object the responsibility of providing its dependencies.
 * Inject the given dependencies or helper components for a given object.
@@ -22,14 +22,15 @@
     1. Setter Injection
         * Use this when you have optional dependencies
 
-# AutoWiring
+## AutoWiring
 * For dependency injection, Spring can use autowiring.
 * Spring will look for a class that matches
     * matches by type: class or interface
 * Spring will inject it automatically .. hence it is autowired
 * Spring will scan for component
 
-# Constructor Injection (CI)
+## Constructor Injection (CI)
+* The Spring Framework will perform operations behind ther scenes for you.
 1. Define the dependency interface and class
 1. Create Demo REST Controller
 1. Create a constructor in your class for injections
@@ -69,4 +70,51 @@ public class DemoController{
         return myCoach.getDailyWorkout();
     }
 }
+```
+
+## Component Scanning
+* Spring will scan your Java classes for special annotations such as @Component.
+* Automatically register the beans in the Spring container 
+* **SpringBootAplication** enables auto configuration, component scanning and additional configuration
+    1. @EnableAutoConfiguration 
+    1. @ComponentScan
+    1. @Configuration
+
+* **SpringBootAplication**: Behin the scenes creates application context and registers all beans. Starts the embedded server Tomcat etc.
+* Starts components scanning from same package as your main Spriing Boot application and also scans sub-packages recursively
+
+## Setter Injection (CI)
+* Inject dependencies by calling your setter method(s) on your calass
+* The Spring Framework will perform operations behind the scenes for you
+* Inject dependencies by calling ANY method on your class
+1. Create setter method(s) in your class for injection.
+1. Configure the dependency injection with @Autowired annotation
+```Java
+@RestController
+public class DemoController{
+    
+    private Coach myCoach;
+
+    @Autowired
+    public void setCoach(Coach theCoach){
+        this.myCoach = theCoach;
+    }
+
+    @GetMapping("dailyworkout")
+    public String getDailyWorkout(){
+        return myCoach.getDailyWorkout();
+    }
+}
+```
+
+# Field Injection (deprecated)
+* In the early days, field injection was popular on Spring projects
+* In recent years, it has fallen out of favor
+* In general, it makes the code harder to unit test
+* A a result, the spring.io team does not recommend field injection
+* You will see it being used on legacy projects
+```Java
+@Autowired
+private Coach myCoach;
+// no need for constructors or setters
 ```
