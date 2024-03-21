@@ -144,7 +144,30 @@ public class TennisCoach implements Coach{
 * If you mix @Primary and @Qualifier
     * @Qualifier has higher priority
 * @Primary could have   the issue of multiple @Primary classes leading to an error
-* @Qualifir allows to you be very specific on which bean you want
+* @Qualifier allows to you be very specific on which bean you want
 * In general using @Qualifier is recommended
     * More specific
     * Higher priority
+
+# Initialization
+* By default, when your application starts, all beans are intialized
+    * @Component, etc.
+* Spring will create an instance of each and make them available
+
+# Lazy Initialization
+* Instead of creating all beans up front, we can specify lazy initialization
+* All beans will only be initialized in the following cases:
+    * It is needed for DI
+    * It is explicitly requested
+* Add the @Lazy annotation to a given class
+* It is global property (default=false). No beans are created until needed!
+```
+    spring.main.lazy-initialization = true
+```
+* Advantages:
+    * Only create objects as needed
+    * May help with faster startup time if you have large number of components
+* Disadvantages:
+    * If you have web related components like @RestController, not created until requested
+    * May not discover configuration issues until too late
+    * Need to make sure you have enough memory for all beans once created
