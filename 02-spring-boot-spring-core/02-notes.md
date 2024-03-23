@@ -107,7 +107,7 @@ public class DemoController{
 }
 ```
 
-# Field Injection (deprecated)
+## Field Injection (deprecated)
 * In the early days, field injection was popular on Spring projects
 * In recent years, it has fallen out of favor
 * In general, it makes the code harder to unit test
@@ -119,7 +119,7 @@ private Coach myCoach;
 // no need for constructors or setters
 ```
 
-# Qualifiers
+## Qualifiers
 * If there is more than one bean, we may receive an error. To solve this problem, **Qualifier** is used.
 ```Java
 @Autowired
@@ -129,7 +129,7 @@ public DemoController(@Qualifier("tenisCoach") Coach theCoach){
 ```
 * The qualifier name is the same as the class name. Just it starts with lower-case.
 
-# Primary
+## Primary
 * When using **@Primary**, can have only one for multiple implementation. If you mark multiple classes with @Primary it is a problem.
 ```Java
 @Component
@@ -149,12 +149,12 @@ public class TennisCoach implements Coach{
     * More specific
     * Higher priority
 
-# Initialization
+## Initialization
 * By default, when your application starts, all beans are intialized
     * @Component, etc.
 * Spring will create an instance of each and make them available
 
-# Lazy Initialization
+## Lazy Initialization
 * Instead of creating all beans up front, we can specify lazy initialization
 * All beans will only be initialized in the following cases:
     * It is needed for DI
@@ -172,7 +172,7 @@ public class TennisCoach implements Coach{
     * May not discover configuration issues until too late
     * Need to make sure you have enough memory for all beans once created
 
-# Bean Scopes
+## Bean Scopes
 * Scopre refers to the lifecycle of a bean
     * How long does the bean live?
     * How many instances are created?
@@ -183,6 +183,12 @@ public class TennisCoach implements Coach{
     * All dependency injections for the bean will reference the **SAME** bean
 * **Prototype** Scope
     * New object instance for each injection
+    * In contrast to the other scopes, Spring does not manage the complete lifecycle of a prototype bean: the container instantiates, configures, and otherwise assembles a prototype object, and hands it to the client, with no further record of that prototype instance.
+
+    * Thus, although initialization lifecycle callback methods are called on all objects regardless of scope, in the case of prototypes, configured destruction lifecycle callbacks are not called. The client code must clean up prototype-scoped objects and release expensive resources that the prototype bean(s) are holding.
+
+    * Prototype Beans and Lazy Initialization
+    Prototype beans are lazy by default. There is no need to use the @Lazy annotation for prototype scopes beans.
 ```Java
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -190,3 +196,33 @@ public class TennisCoach implements Coach{
     //...
 }
 ```
+
+## Bean Lifecycle Methods - Annotations
+* Bean Lifecycle:
+    1. Container Started
+    1. Bean Instantiated
+    1. Dependencies Injected
+    1. Internal Spring Processing
+    1. Your Custom Inıt Method
+    1. Bean is Reay for Use
+* Container Shutdown
+    1. Your custom destroy method
+    1. Stop!
+* You can add custom code during bean initialization
+    * Calling custom business logic methods
+    * Setting up handles to resources(db, sockets, file etc.)
+* You can add custom code during bean destruction
+    * Calling custom business logic method
+    * Clean up handles to resources (db, sockets, file etc.)
+```Java
+    @PostConstruct
+    public void doMyStartupStaff(){
+        System.out.println("In doMyStartupStaff(): "+ getClass().getSimpleName());
+    }
+
+    @PreDestroy
+    public void doMyCleanupStaff(){
+        System.out.println("In doMyCleanupStaff(): "+ getClass().getSimpleName());
+    }
+```
+

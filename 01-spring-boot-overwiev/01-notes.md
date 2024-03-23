@@ -148,7 +148,7 @@ public class DemoRestController{
 </dependency>
 ```
 
-# Spring Boot Actuator
+## Spring Boot Actuator
 * Exposes endpoints to monitor and manage your application.
 * You easily get DevOps functionality out-of-the-box.
 * Simply add the dependency to your POM file.
@@ -180,7 +180,7 @@ info.app.version = 1.0.0
 management.endpoints.web.exposure.include=*
 ```
 
-# Spring Boot Actuator Security
+## Spring Boot Actuator Security
 * You may not want to expose all of this information
 * Add spring security
 * Automatically secure REST endpoints
@@ -196,7 +196,7 @@ management.endpoints.web.exposure.include=*
 management.endpoints.web.exposure.exclude=health,info
 ```
 
-# Application Properties File
+## Application Properties File
 * By default, Spring Boot reads information from a standart properties file.
 * It is located at: **src/main/resources/application.properties**
 * You can define any custom properties in this file.
