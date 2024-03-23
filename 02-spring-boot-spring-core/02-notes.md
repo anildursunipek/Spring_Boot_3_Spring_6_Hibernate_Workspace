@@ -226,3 +226,31 @@ public class TennisCoach implements Coach{
     }
 ```
 
+## Configuring Beans with Java Code
+* **Make an existing third-party class available to Spring Framework**
+* You moy not have access to the source code of third-party class
+* However, you would like to use the third-party class as a Spring Bean
+* We can modify third-party class (like Amazon S3 Client. It is part of AWS SDK)
+* Development Process:
+    1. Create @Configuration class
+    1. Define @Bean method to configure the bean
+    1. Inject the bean into our controller
+```Java
+@Configuration
+public class SportConfig {
+
+    @Bean("aquatic") // Custom bean id
+    public Coach swimCoach(){
+        return new SwimCoach();
+    }
+}
+
+//...
+
+@Autowired
+public DemoController(@Qualifier("aquatic") Coach theCoach)
+{
+    System.out.println("In Constructor: " + getClass().getSimpleName());
+    this.myCoach = theCoach;
+}
+```
