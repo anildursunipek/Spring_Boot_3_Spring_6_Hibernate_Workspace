@@ -171,3 +171,22 @@ public class TennisCoach implements Coach{
     * If you have web related components like @RestController, not created until requested
     * May not discover configuration issues until too late
     * Need to make sure you have enough memory for all beans once created
+
+# Bean Scopes
+* Scopre refers to the lifecycle of a bean
+    * How long does the bean live?
+    * How many instances are created?
+    * How is the bean shared?
+* Default scope is **Singleton**
+    * Spring Container creates only one instance of the bean, by default
+    * It is cached in memory
+    * All dependency injections for the bean will reference the **SAME** bean
+* **Prototype** Scope
+    * New object instance for each injection
+```Java
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class TennisCoach implements Coach{
+    //...
+}
+```
