@@ -384,3 +384,28 @@ private void deleteStudent(StudentDAO studentDAO) {
     studentDAO.deelete(studentId);
 }
 ```
+
+## Create Database Table from Java Code
+* JPA/Hibernate provides an option to automagically create database tables
+* Creates tables based on Java code with JPA/Hibernate annotations
+* Useful for development and testing
+```properties
+spring.jpa.hibernate.dll-auto=create
+# Database tables are dropped first and then created from scratch
+# Modes:
+    * none
+    * create-only
+    * drop
+    * create
+    * create-drop
+    * validate
+    * update
+```
+* For basic projects, can use auto configuration
+* Automatic table generation is useful for:
+    * Database integration testing with in-memory databases
+    * Basic, small hobby projects
+* In general, Auto generation is not recommended for enterprise, real-time projects
+```
+
+```
