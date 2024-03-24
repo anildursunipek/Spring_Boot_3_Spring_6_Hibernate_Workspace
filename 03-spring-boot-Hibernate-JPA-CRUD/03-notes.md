@@ -175,6 +175,10 @@ public class Student {
 * If you want high-level of abstraction, use **JpaRepostiry**
 
 ## Example Code
+
+### Create Object
+---
+
 ```Java
 public interface StudentDAO {
     void save(Student theStudent);
@@ -224,4 +228,88 @@ public class StudentDAOImlp implements StudentDAO{
 		// display id of the saved student
 		System.out.println("Saved student id: " + student.getId());
 	}
+```
+
+### Read Object
+* No need to add @Transactional since we are doing a query
+---
+```Java
+public interface StudentDAO {
+    Student find(Integer id);
+}
+```
+```Java
+@Override
+public Student find(Integer id) {
+    // Student.class -> Entity class
+    // id -> primary key
+    return entityManager.find(Student.class, id);
+}
+```
+```Java
+private void readStudent(StudentDAO studentDAO) {
+    // Create a student object
+    Student student = new Student("Sabah", "Ipek", "sabanipek@gmail.com");
+
+    // Save the student
+    studentDAO.save(student);
+
+    // Display the id of the saved student
+    int theId = student.getId();
+    System.out.println("Saved student id: " + theId);
+
+    // Retrive student based on the id: primary key
+    Student tempStudent = studentDAO.find(theId);
+
+    // Display student
+    System.out.println(tempStudent);
+}
+```
+
+## Querying Objects with JPA
+* JPA has the JPA query language or JPQL
+* Query language for retrieving objects
+* Similar in concept to SQL
+    * where, like, order by, join, etc...
+* JPQL is based on entity name and entity fields
+
+```Java
+public interface StudentDAO {
+    List<Student> findByLastName(String theLastName);
+}
+```
+
+```Java
+@Override
+public List<Student> findByLastName(String theLastName) {
+    // Create query
+    TypedQuery<Student> theQuery = entityManager.createQuery("From Student WHERE lastName=:theData", Student.class);
+    // JPQL Named Parameters are prefixed with a colon :
+
+    // Set query parameters
+    theQuery.setParameter("theData", theLastName);
+
+    // Return query results
+    return theQuery.getResultList();
+}
+```
+```Java
+@Bean
+public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
+    return runner -> {
+        queryForStudentsByLastName(studentDAO);
+    };
+}
+```
+
+```Java
+private void queryForStudentsByLastName(StudentDAO studentDAO) {
+    // get a list of students
+    List<Student> students = studentDAO.findByLastName("Cengiz");
+
+    // display list of students
+    for(Student student: gstudents){
+        System.out.println(student);
+    }
+}
 ```
