@@ -149,3 +149,79 @@ public class Student {
 }
 
 ```
+
+## Data Access Object (DAO)
+* Responsible for interfacing with the database
+* This is a common design pattern
+* Helper class for communicating with database
+* DAO Methods:
+    * save(..)
+    * findById(..)
+    * findAll(..)
+    * findByLastName(..)
+    * update(..)
+    * delete(..)
+    * deleteAll()
+* DAO needs a JPA Entity Manager
+* JPA Entity Manager is the main component for saving/retrieving entities
+
+## JPA Entity Manager
+* JPA Entity Manager needs a Data Source
+* The Data Source defines database connection info
+* These are automatically created by Spring Boot.
+    * based on the application.properties
+* We can autowire/inject the JPA Entity Manager into our DAO
+* If you need low-level control and flexibility, use **EntityManager**
+* If you want high-level of abstraction, use **JpaRepostiry**
+
+## Example Code
+```Java
+public interface StudentDAO {
+    void save(Student theStudent);
+}
+```
+```Java
+// Specialized annotation for repositories
+// Support component scanning
+// Translate JDBC exceptions
+@Repository
+public class StudentDAOImlp implements StudentDAO{
+
+    // define field for entity manager
+    private EntityManager entityManager;
+
+    // inject entity manager using constructor injection
+    @Autowired
+    public StudentDAOImlp(EntityManager entityManager){
+        this.entityManager = entityManager;
+    }
+
+    // implement save method
+    @Override
+    @Transactional
+    public void save(Student theStudent) {
+        entityManager.persist(theStudent);
+    }
+}
+```
+```Java
+	@Bean
+	public CommandLineRunner commandLineRunner(StudentDAO studentDAO){
+		return runner -> {
+			createStudent(studentDAO);
+		};
+	}
+
+	private void createStudent(StudentDAO studentDAO) {
+		// create the student object
+		System.out.println("Created new student object");
+		Student student = new Student("Anil", "Ipek", "anildursunipek@gmail.com");
+
+		// save the student object
+		System.out.println("Saved to database");
+		studentDAO.save(student);
+
+		// display id of the saved student
+		System.out.println("Saved student id: " + student.getId());
+	}
+```
