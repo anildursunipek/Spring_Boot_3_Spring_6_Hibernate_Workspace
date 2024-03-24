@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.convert.Jsr310Converters;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 @SpringBootApplication
@@ -29,14 +30,30 @@ public class CruddemoApplication {
 
 			// queryForStudentsByLastName(studentDAO);
 
-			updateStudent(studentDAO);
+			// updateStudent(studentDAO);
+
+			// deleteStudent(studentDAO);
+
+			deleteAllStudents(studentDAO);
 		};
+	}
+
+	private void deleteAllStudents(StudentDAO studentDAO) {
+		System.out.println("All students deleting...");
+		int numRowsDeleted = studentDAO.deleteAll();
+		System.out.println("Deleted row count: " + numRowsDeleted);
+	}
+
+	private void deleteStudent(StudentDAO studentDAO) {
+		int studentId = 5;
+		System.out.println("Deleting student with id: " + studentId);
+		studentDAO.deelete(studentId);
 	}
 
 	private void updateStudent(StudentDAO studentDAO) {
 		// retrieve student based on the id: primary key
 		int studentId = 5;
-		System.out.println("Gettin student with id: " + studentId);
+		System.out.println("Getting student with id: " + studentId);
 		Student student = studentDAO.find(studentId);
 
 		// change first name

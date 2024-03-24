@@ -345,3 +345,42 @@ private void updateStudent(StudentDAO studentDAO) {
     System.out.println("Updated student: " + student);
 }
 ```
+
+## Delete Object/Objects
+```Java
+public interface StudentDAO {
+    void deelete(Integer id);
+    int deleteAll();
+}
+```
+```Java
+@Override
+@Transactional
+public int deleteAll() {
+    int numRowsDeleted = entityManager.createQuery("DELETE FROM Student").executeUpdate();
+    return numRowsDeleted;
+}
+
+@Override
+@Transactional
+public void deelete(Integer id) {
+    // retrieve the student
+    Student theStudent = entityManager.find(Student.class, id);
+
+    // delete the student
+    entityManager.remove(theStudent);
+}
+```
+```Java
+private void deleteAllStudents(StudentDAO studentDAO) {
+    System.out.println("All students deleting...");
+    int numRowsDeleted = studentDAO.deleteAll();
+    System.out.println("Deleted row count: " + numRowsDeleted);
+}
+
+private void deleteStudent(StudentDAO studentDAO) {
+    int studentId = 5;
+    System.out.println("Deleting student with id: " + studentId);
+    studentDAO.deelete(studentId);
+}
+```
