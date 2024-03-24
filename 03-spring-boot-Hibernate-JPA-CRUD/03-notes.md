@@ -308,8 +308,40 @@ private void queryForStudentsByLastName(StudentDAO studentDAO) {
     List<Student> students = studentDAO.findByLastName("Cengiz");
 
     // display list of students
-    for(Student student: gstudents){
+    for(Student student: students){
         System.out.println(student);
     }
+}
+```
+
+## Update Object
+```Java
+public interface StudentDAO {
+    void update(Student theStudent);
+}
+```
+```Java
+@Override
+@Transactional
+public void update(Student theStudent) {
+    entityManager.merge(theStudent);
+}
+```
+```Java
+private void updateStudent(StudentDAO studentDAO) {
+    // retrieve student based on the id: primary key
+    int studentId = 5;
+    System.out.println("Gettin student with id: " + studentId);
+    Student student = studentDAO.find(studentId);
+
+    // change first name
+    System.out.println("Updating student...");
+    student.setFirstName("Ahmet");
+
+    // update the student
+    studentDAO.update(student);
+
+    // display the updated student
+    System.out.println("Updated student: " + student);
 }
 ```
