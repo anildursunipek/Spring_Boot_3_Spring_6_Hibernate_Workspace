@@ -71,3 +71,37 @@ public class DemoRestController {
     }
 }
 ```
+
+## Java JSON Data Binding
+* POJO -> Plain Old Java Object
+* Data binding is the process of converting JSON data to Java POJO
+* JSON data binding with **Jackson**
+    * Jackson handles data binding between JSON and Java POJO
+    * Spring Boot Starter Web automatically includes dependency for Jackson
+* By default, Jackson will call appropriate getter/setter method
+* Convert JSON to Java POJO .. call setter methods on POJO
+    * Jackson calls the setXXX methods. It does Not access internal private fields directly. It only calls existing setter methods !!!
+* Conver Java POJO to JSON ... call geter methods on POJO
+    * Jackson will do this work
+* When building Spring REST application
+    * Spring will automatically handle Jackson integration
+    * JSON data being passed to REST controller is converted to POJO
+    * Java object being returned from REST controller is converted to JSON
+    * Happens automatically behind the scene
+
+```Java
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+    @GetMapping("/students")
+    public List<Student> getStudents(){
+        List<Student> list = new ArrayList<Student>();
+        list.add(new Student("Anil", "Ipek"));
+        list.add(new Student("Gamze", "Ipek"));
+        list.add(new Student("Hatice", "Ipek"));
+
+        // Spring REST and Jackson will automatically convert POJOs to JSON
+        return list;
+    }
+}
+```
