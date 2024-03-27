@@ -406,6 +406,3 @@ spring.jpa.hibernate.dll-auto=create
     * Database integration testing with in-memory databases
     * Basic, small hobby projects
 * In general, Auto generation is not recommended for enterprise, real-time projects
-```
-
-```
