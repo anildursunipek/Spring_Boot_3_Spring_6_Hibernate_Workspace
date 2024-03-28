@@ -344,6 +344,7 @@ public class EmployeeRestController {
     * Extending and adding custom queries with JPQL
     * Query Domain Specific Language (Query DSL)
     * Defining custom methods (low-level-coding)
+
 ![spring data jpa](spring-data-jpa.png)
 
 ```Java
@@ -351,3 +352,31 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     // no need to write any code
 }
 ```
+
+## Spring Data REST in Spring Boot
+* Spring will give you a REST CRUD implementation 
+    * Helps to minimize boilerplate REST code !!!
+    * No new coding
+* Spring Data REST will expose these endpoints
+    * Get a list of employee: /employees
+    * Get a single employee by id: /employees/{employeeId}
+    * Add a new employee: /employees
+    * Update an employee: /employees/{employeeId}
+    * Delete an employee: /employees/{employeeId}
+* Spring Data REST will scan your project for JpaRepository
+* Expose REST APIs for each entity type for your ** JpaRepository**
+* By default, it will create endpoints based on entity type
+    * entity: employee --> "/employees" plural form
+
+```Xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-rest</artifactId>
+</dependency>
+```
+* For Spring Data REST, you only need 3 items
+    1. Entity
+    1. JpaRepository
+    1. Maven POM Dependency
+
+![spring-data-rest](spring-data-rest.png)
