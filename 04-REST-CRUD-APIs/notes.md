@@ -379,4 +379,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     1. JpaRepository
     1. Maven POM Dependency
 
+```properties
+spring.data.rest.base-path=/api # set base path
+spring.data.rest.default-page-size=3 # default page size
+```
+
 ![spring-data-rest](spring-data-rest.png)
