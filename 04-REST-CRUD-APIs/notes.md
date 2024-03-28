@@ -205,3 +205,18 @@ public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
     * Real-time us of AOP
     * Pre-process request to controllers
     * Post-process response to handle exceptions
+```Java
+@ControllerAdvice
+public class StudentRestExceptionHandler {
+
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc){
+        // ...
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
+        // ...
+    }
+}
+```
