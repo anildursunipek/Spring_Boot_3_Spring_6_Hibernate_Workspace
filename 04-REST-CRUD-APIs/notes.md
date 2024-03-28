@@ -105,3 +105,27 @@ public class StudentRestController {
     }
 }
 ```
+
+## Path Variables
+```Java
+@RestController
+@RequestMapping("/api")
+public class StudentRestController {
+
+    private List<Student> studentList;
+
+    @PostConstruct
+    public void loadData(){
+        studentList = new ArrayList<Student>();
+        studentList.add(new Student("Anil", "Ipek"));
+        studentList.add(new Student("Gamze", "Ipek"));
+        studentList.add(new Student("Hatice", "Ipek"));
+    }
+
+    @GetMapping("/students/{studentId}")
+    public Student getStudentById(@PathVariable int studentId){
+        // By default, variables must match
+        return studentList.get(studentId);
+    }
+}
+```
