@@ -196,3 +196,12 @@ public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
     return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
 }
 ```
+
+## Global Excepiton Handling
+* Exception handler code is only for the specific REST controller. Can't be reused by other controllers
+* We needg global exception handlers
+* Centralizes exception handling
+* @Controller Advice is perfect for global exception handling
+    * Real-time us of AOP
+    * Pre-process request to controllers
+    * Post-process response to handle exceptions
