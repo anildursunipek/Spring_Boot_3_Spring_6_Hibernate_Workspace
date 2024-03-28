@@ -332,3 +332,22 @@ public class EmployeeRestController {
     }
 }
 ```
+
+## Spring Data JPA
+* Create DAO and just plug in your entity type and primary key
+* It will give you a CRUD implementation for free
+* Helps to minimize boilerplate DAO code
+* More than 70% reduction in code ... depending on use case
+* Spring Data JPA provides the interface JpaRepository
+* Extend JpaRepository interface and use your repository in your app
+* Advanced Features:
+    * Extending and adding custom queries with JPQL
+    * Query Domain Specific Language (Query DSL)
+    * Defining custom methods (low-level-coding)
+![spring data jpa](spring-data-jpa.png)
+
+```Java
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+    // no need to write any code
+}
+```
