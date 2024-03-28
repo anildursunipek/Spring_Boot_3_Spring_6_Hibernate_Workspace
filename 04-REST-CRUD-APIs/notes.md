@@ -167,7 +167,7 @@ public Student getStudentById(@PathVariable int studentId){
     }
 
     // By default, variables must match
-    return studentList.get(studentId);
+    return studentList.get(stu  dentId);
 }
 ```
 * Add an exception handled method using **@ExceptionHandler**
@@ -217,6 +217,118 @@ public class StudentRestExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
         // ...
+    }
+}
+```
+
+## Rest API Design
+1. Review API requirements
+1. Identify main resource / entity
+    * /employees: Convention is to use plural form of resource
+    * /api/employees
+1. Use HTTP methods to assign action on resource
+* Example API:
+    * Task: Create a REST API  for the Employee Directory
+    * REST clients should be able to:
+        * Get a list of employee: /api/employees
+        * Get a single employee by id: /api/employees/{employeeId}
+        * Add a new employee: /api/employees
+        * Update an employee: /api/employees
+        * Delete an employee: /api/employees/{employeeId}
+* DO NOT DO THIS
+    * /api/employeeList
+    * /api/deleteEmployee
+    * These are REST anti-patterns, bad practice
+    * Don't include actions in the endpoint
+
+## Service Layer
+* Service Facade desing pattern
+* Intermediate layer for custom business logic
+* Integrate data from multiple sources (DAO/repositories)
+* Spring provides the @Service annotation. @Service applied to Service implementations.
+* Spring will automatically register the Service implementation
+![](component-service-layer.png)
+* Process:
+    1. Define Service interface
+    1. Define Service implementation
+        * Intect DAO
+* We don't use @Transactional at DAO layer. It will be handled at Service layer
+
+```Java
+public interface EmployeeService {
+    List<Employee> findAll();
+}
+```
+
+```Java
+@Service
+public class EmployeeServiceImpl implements EmployeeService{
+    private EmployeeDao employeeDao;
+
+    public EmployeeServiceImpl(EmployeeDao employeeDao){
+        this.employeeDao = employeeDao;
+    }
+
+    @Override
+    public List<Employee> findAll() {
+        return employeeDao.findAll();
+    }
+}
+```
+![layers](image.png)
+
+## Employee REST API/Service
+```Java
+@RestController
+@RequestMapping("/api")
+public class EmployeeRestController {
+    private EmployeeService employeeService;
+
+    // inject EmployeeDao ( Constructor Injection )
+    @Autowired
+    public EmployeeRestController(EmployeeService employeeService){
+        this.employeeService = employeeService;
+    }
+
+    // expose "/employee" and return a list of employees
+    @GetMapping("/employees")
+    public List<Employee> getEmployees(){
+        return employeeService.findAll();
+    }
+
+    @GetMapping("/employees/{employeeId}")
+    public Employee getEmployee(@PathVariable int employeeId){
+         Employee employee = employeeService.findById(employeeId);
+
+         if(employee == null)
+             throw new RuntimeException("Employee id not found - " + employeeId);
+
+         return employee;
+    }
+
+    @PostMapping("/employees")
+    public Employee addEmployee(@RequestBody Employee theEmployee){
+        theEmployee.setId(0);
+        Employee dbEmployee = employeeService.save(theEmployee);
+
+        return dbEmployee;
+    }
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee theEmployee){
+        Employee employee = employeeService.save(theEmployee);
+        return employee;
+    }
+
+    @DeleteMapping("/employees/{employeeId}")
+    public String deleteEmployeeById(@PathVariable int employeeId){
+        Employee tempEmployee = employeeService.findById(employeeId);
+
+        if(tempEmployee == null)
+            throw  new RuntimeException("Employee id not found - " + employeeId);
+
+        employeeService.deleteById(employeeId);
+        return "Deleted employee id: " + employeeId;
     }
 }
 ```
