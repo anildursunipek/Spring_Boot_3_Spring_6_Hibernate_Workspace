@@ -129,3 +129,70 @@ public class StudentRestController {
     }
 }
 ```
+
+## Spring Boot REST Exception Handling
+* Create a custom error response class
+```Java
+public class StudentErrorResponse {
+    private int status;
+    private String message;
+    private long timeStamp;
+    // ... constructors
+    // ... getters / setters
+}
+```
+* Create a custom exception class
+```Java
+public class StudentNotFoundException extends RuntimeException{
+
+    public StudentNotFoundException(String message) {
+        super(message);
+    }
+
+    public StudentNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public StudentNotFoundException(Throwable cause) {
+        super(cause);
+    }
+}
+```
+* Update REST service to throw exception if student not found
+```Java
+@GetMapping("/students/{studentId}")
+public Student getStudentById(@PathVariable int studentId){
+    if( (studentId >= studentList.size()) || (studentId < 0)){
+        throw new StudentNotFoundException("Student id not found - " + studentId);
+    }
+
+    // By default, variables must match
+    return studentList.get(studentId);
+}
+```
+* Add an exception handled method using **@ExceptionHandler**
+```Java
+@ExceptionHandler
+public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exc){
+    // Create a StudentErrorResponse
+    StudentErrorResponse error = new StudentErrorResponse();
+
+    error.setStatus(HttpStatus.NOT_FOUND.value());
+    error.setMessage(exc.getMessage());
+    error.setTimeStamp(System.currentTimeMillis());
+
+    // Return ResponseEntity
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+}
+
+@ExceptionHandler
+public ResponseEntity<StudentErrorResponse> handleException(Exception exc){
+    StudentErrorResponse error = new StudentErrorResponse();
+
+    error.setStatus(HttpStatus.BAD_REQUEST.value());
+    error.setMessage(exc.getMessage());
+    error.setTimeStamp(System.currentTimeMillis());
+
+    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+}
+```
