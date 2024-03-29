@@ -56,3 +56,30 @@ public class DemoSecurityConfig {
 ![users](users.png)
 
 * Since we defined our users here, Spring Boot will Not use the user/pass from the application.properties file
+
+## Restrict URLs based on Roles
+
+![roles](roles.png)
+
+```Java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception{
+    http.authorizeHttpRequests(configurer ->
+            configurer
+                    .requestMatchers(HttpMethod.GET, "/api/employees").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.GET, "/api/employees/**").hasRole("EMPLOYEE")
+                    .requestMatchers(HttpMethod.PUT, "/api/employees").hasRole("MANAGER")
+                    .requestMatchers(HttpMethod.POST, "/api/employees").hasRole("MANAGER")
+                    .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
+    );
+
+    // use HTTP basic authentication
+    http.httpBasic(Customizer.withDefaults());
+
+    // disable Cross Site Request Forgery (CSRF)
+    // in general, not required for statless REST APIs that use POST, PUT, DELETE and/or PATCH
+    http.csrf(csrf -> csrf.disable());
+    
+    return http.build();
+}
+```
