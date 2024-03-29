@@ -1,0 +1,25 @@
+## Spring Security
+* It defines a framework for security
+* Implemented using Servlet filters in the background
+* Two methods of securing an app:
+    1. Declarative
+    1. Porgrammatic
+* Servlet Filters are used to pre-process / post-process web request
+* Servlet Filters can route web requests based on security logic
+* Spring provides a bulk of security functionality with servlet filters
+
+![security-overview](security-overview.png)
+
+![alt text](security-in-action.png)
+
+* **Authentication**: Check user id and password with credentials stored in app / db
+* **Authorization**: Check to see if user has an authorized role
+
+```Xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-security</artifactId>
+</dependency>
+```
+* This will automagically secure all endpoints for application
+* You can override defualt user name and generated password
