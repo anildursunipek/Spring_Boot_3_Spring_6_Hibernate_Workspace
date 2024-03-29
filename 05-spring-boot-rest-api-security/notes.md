@@ -83,3 +83,9 @@ public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception{
     return http.build();
 }
 ```
+
+## JDBC Authentication
+* Spring Security can read user account info from database
+* By default, you have to follow Spring Security's predefined table schemas
+
+![jdbc-auth](image.png)
