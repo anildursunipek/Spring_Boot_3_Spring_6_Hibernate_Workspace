@@ -23,3 +23,36 @@
 ```
 * This will automagically secure all endpoints for application
 * You can override defualt user name and generated password
+
+## Example
+```Java
+@Configuration
+public class DemoSecurityConfig {
+
+    @Bean
+    public InMemoryUserDetailsManager userDetailsManager(){
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test123")
+                .roles("EMPLOYEE")
+                .build();
+
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER")
+                .build();
+
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test123")
+                .roles("EMPLOYEE", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(john, mary, susan);
+    }
+}
+```
+![users](users.png)
+
+* Since we defined our users here, Spring Boot will Not use the user/pass from the application.properties file
