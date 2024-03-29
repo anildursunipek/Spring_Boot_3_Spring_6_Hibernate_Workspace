@@ -89,3 +89,16 @@ public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception{
 * By default, you have to follow Spring Security's predefined table schemas
 
 ![jdbc-auth](image.png)
+
+## BCrypt Encryption
+* The best practice is store passwords in an encrypted foramt
+* Spring Security recommends using the popular bcrypt algorithm
+* bcrypt:
+    * Performs one-way encrypted hashing
+    * Adds a random salt to the password for additional protection
+    * Includes support to defeat brute force attacks
+
+![bcrypt](bcrypt.png)
+
+* The password from db is **NEVER** decrypted
+* Because bcrypt is a **one-way** encryption algorithm
