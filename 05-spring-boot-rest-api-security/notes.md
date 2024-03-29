@@ -102,3 +102,28 @@ public SecurityFilterChain filterChain(HttpSecurity http)  throws Exception{
 
 * The password from db is **NEVER** decrypted
 * Because bcrypt is a **one-way** encryption algorithm
+
+## JDBC Authentication Custom Tables
+* If we have our own custom tables, tell spring how to query your custom tables
+* Provide query to find user by user name
+* Provide query to find authorities / roles by user name
+
+![jdbc-custom-tables](jdbc-custom-tables.png)
+```Java
+    // add support for JDBC
+    @Bean
+    public UserDetailsManager userDetailsManager(DataSource dataSource){
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        // define query to retrieve a user by username
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "select user_id, pw, active from members where user_id=?");
+
+        // define query to retrieve the authorities / roles by username
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "select user_id, roles from roles where user_id=?");
+
+        return jdbcUserDetailsManager;
+    }
+
+```
