@@ -13,3 +13,30 @@
     * Looping and conditionals
     * CSS and JavaScript integration
     * Template layouts and fragments
+
+* Basic hello world app
+
+```Java
+@Controller
+public class DemoController {
+
+    @GetMapping("/hello")
+    public String sayhello(Model theModel){
+
+        theModel.addAttribute("theDate", new java.util.Date());
+        return "helloworld";
+    }
+}
+```
+```Html
+<!DOCKTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Demo</title>
+</head>
+<body>
+    <p th:text="'Time on the server is' + ${theDate}"\>
+
+</body>
+</html>
+```
