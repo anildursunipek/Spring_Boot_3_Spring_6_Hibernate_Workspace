@@ -119,3 +119,43 @@ public class FormController {
 </body>
 </html>
 ```
+
+## Adding Data to Spring MVC Model 
+* The model is a container for your application data
+* In your Controller
+    * You can put anything in the model
+    * string, objects, info from database, etc...
+* Your view page can access data from the model
+* Example:
+```Java
+@RequestMapping("/processForm")
+public String processForm(HttpServletRequest request, Model model){
+    String name = request.getParameter("studentName");
+    name = name.toUpperCase();
+    String message = "Hi! " + name;
+
+    model.addAttribute("name", name);
+    model.addAttribute("message", message);
+    return "p-form";
+}
+```
+
+## @RequestParam Annotation
+* Spring will read param from request and bind it to veriable
+* Example:
+```Java
+// Spring does this work behind the scenes!
+String name = request.getParameter("studentName");
+```
+
+```Java
+@RequestMapping("/processForm")
+public String processForm(@RequestParam("studentName") String name, Model model){
+    name = name.toUpperCase();
+    String message = "Hi! " + name;
+
+    model.addAttribute("name", name);
+    model.addAttribute("message", message);
+    return "p-form";
+}
+```
