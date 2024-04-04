@@ -1,0 +1,13 @@
+<!DOCKTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Controller Demo</title>
+</head>
+<body>
+    <form th:action="@{processForm}" method="GET"/>
+        <input type="text" name="studentName" placeholder="Enter the name"/>
+        <input type="submit">
+    </form>
+</body>
+</html>
