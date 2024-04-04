@@ -159,3 +159,153 @@ public String processForm(@RequestParam("studentName") String name, Model model)
     return "p-form";
 }
 ```
+
+## @GetMapping And @PostMapping
+* Get: Request data from given resource
+    * Good for debugging
+    * Bookmark or email URL
+    * Limitations on data lenght
+* Post: Submits data to given resource
+    * Can't bookmark or email URL
+    * No limitations on data lenght
+    * Can also send binary data
+* Sendin data with GET method
+    * theURL?field1=value1&field2=value2
+* @RequestMapping handles ALL HTTP methods
+* @RequestMapping(path="/path", method=RequestMethod.GET)
+    * This mapping **only** handles GET method
+    * Any other HTTP REQUEST method will get rejected
+* Sending Data with POST method
+    * Data is passed in the body of HTTP request message
+
+![POST](post.png)
+
+## MVC Form Data Bingding
+* Spring MVC forms can make use of data binding
+* Automatically setting / retrieving data from a Java object / bean
+* Before you show the form, you must add a model attribute
+* This is a bean that will hold form data for the data binding
+* When form is **loaded** Spring MVC will read student from the model, then call
+* When form is **submitted** Spring MVC will create a new Student instance and add to the model, then call
+* Example:
+```Java
+public class Student {
+    private String firstName;
+    private String lastName;
+    
+    public Student(){}
+    
+    public String getFirstName() {
+        return firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+}
+```
+
+```Java
+@Controller
+public class StudentController {
+
+    @GetMapping("/showStudentForm")
+    public String showForm(Model theModel){
+        Student theStudent = new Student();
+
+        theModel.addAttribute("student", theStudent);
+        return "student-registration-form";
+    }
+
+    @PostMapping("/processStudentForm")
+    public String processStudentForm(@ModelAttribute("student") Student theStudent){
+
+        System.out.println("theSudent: " + theStudent.getFirstName() + " " + theStudent.getLastName());
+        return "confirmation";
+    }
+}
+```
+
+```Html
+<!DOCKTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Registration Form</title>
+</head>
+<body>
+    <form th:action="@{/processStudentForm}" th:object="${student}" method="POST"/>
+        First name: <input type="text" th:field="${student.firstName}"/>
+        <br><br>
+        Last name: <input type="text" th:field="${student.lastName}"/>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+```
+
+```Html
+<!DOCKTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Confirmation</title>
+</head>
+<body>
+    <h1>Student Confirmation Page</h1>
+    <p>This student is confirmed: <span th:text="${student.firstName} + ' ' + ${student.lastName}"/></p>
+</body>
+</html>
+```
+
+* Note: *{firstName} is **shortcut syntax** for: ${student.firstName}
+
+## Drop-Down-Lists
+```Html
+<select th:field="${student.country}">
+    <option th:value="Brazil">Brazil</option>
+    <option th:value="France">France</option>
+    <option th:value="Germany">Germany</option>
+    <option th:value="India">India</option>
+</select>
+```
+
+```Html
+<select th:field="${student.country}">
+    <option th:each="tempCountry : ${countries}" th:value="${tempCountry}" th:text="${tempCountry}"/>
+</select>
+```
+
+## Radio-Buttons
+```Html
+<input type="radio" th:field="${student.favoriteLanguage}"
+                    th:each="tempLanguage : ${languages}"
+                    th:value="${tempLanguage}"
+                    th:text="${tempLanguage}" />
+```
+
+## Checkboxs
+```Html
+<input type="checkbox"  th:field="${student.favoriteSystems}"
+                        th:each="system : ${systems}"
+                        th:value="${system}"
+                        th:text="${system}"/>
+```
+
+## Data injection from application.properties
+```properties
+countries=Brazil,France,Germany,India,Mexico,Spain,United States
+```
+```Java
+// Injection
+@Value("${countries}")
+public List<String> countries;
+```
+
+
